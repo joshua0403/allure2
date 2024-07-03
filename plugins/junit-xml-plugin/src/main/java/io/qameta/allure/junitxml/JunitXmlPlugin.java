@@ -162,7 +162,8 @@ public class JunitXmlPlugin implements Reader {
         final TestSuiteInfo info = new TestSuiteInfo()
                 .setName(name)
                 .setHostname(hostname)
-                .setTimestamp(getUnix(timestamp));
+                .setTimestamp(getUnix(timestamp))
+                .setNextStartTimestamp(getUnix(timestamp));
         testSuiteElement.get(TEST_CASE_ELEMENT_NAME)
                 .forEach(element -> parseTestCase(info, element,
                                                   resultsDirectory, parsedFile, context, visitor));
@@ -242,7 +243,13 @@ public class JunitXmlPlugin implements Reader {
         }
         result.setUid(context.getValue().get());
         result.setName(isNull(name) ? "Unknown test case" : name);
-        result.setTime(getTime(info.getTimestamp(), testCaseElement, parsedFile));
+        
+        result.setTime(getTime(info.getNextStartTimestamp(), testCaseElement, parsedFile));
+        final long duration = BigDecimal.valueOf(testCaseElement.getDoubleAttribute(TIME_ATTRIBUTE_NAME))
+                .multiply(MULTIPLICAND)
+                .longValue();
+        info.setNextStartTimestamp(info.getNextStartTimestamp()+duration);
+
         result.addLabelIfNotExists(RESULT_FORMAT, JUNIT_RESULTS_FORMAT);
         setParameters(result, testCaseElement);
 
@@ -250,6 +257,9 @@ public class JunitXmlPlugin implements Reader {
         if (nonNull(info.getHostname())) {
             result.addLabelIfNotExists(LabelName.HOST, info.getHostname());
         }
+
+        result.addLabelIfNotExists(LabelName.THREAD, testCaseElement.getAttribute("thread"));
+
         if (nonNull(className)) {
             result.addLabelIfNotExists(LabelName.TEST_CLASS, className);
             result.addLabelIfNotExists(LabelName.PACKAGE, className);
