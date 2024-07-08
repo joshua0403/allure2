@@ -30,6 +30,8 @@
 - 🖥️ [Live Demo](https://demo.allurereport.org/) — explore a live example of Allure Report in action
 
 ---
+## Enhance
+1. Support integrate with [maestro](https://github.com/joshua0403/maestro) for junit report (timeline, summary time, history time)
 
 ## Download
 
