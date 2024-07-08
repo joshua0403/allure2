@@ -248,7 +248,7 @@ public class JunitXmlPlugin implements Reader {
         final long duration = BigDecimal.valueOf(testCaseElement.getDoubleAttribute(TIME_ATTRIBUTE_NAME))
                 .multiply(MULTIPLICAND)
                 .longValue();
-        info.setNextStartTimestamp(info.getNextStartTimestamp()+duration);
+        info.setNextStartTimestamp(info.getNextStartTimestamp() + duration);
 
         result.addLabelIfNotExists(RESULT_FORMAT, JUNIT_RESULTS_FORMAT);
         setParameters(result, testCaseElement);

@@ -28,5 +28,5 @@ import lombok.experimental.Accessors;
     protected String name;
     protected String hostname;
     protected Long timestamp;
-    Long nextStartTimestamp;
+    protected Long nextStartTimestamp;
 }
